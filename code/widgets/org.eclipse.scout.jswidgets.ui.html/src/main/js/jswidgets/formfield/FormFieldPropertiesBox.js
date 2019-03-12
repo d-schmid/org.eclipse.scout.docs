@@ -78,7 +78,7 @@ jswidgets.FormFieldPropertiesBox.prototype._setField = function(field) {
   labelWidthInPixelField.on('propertyChange', this._onPropertyChange.bind(this));
 
   var errorStatusField = this.widget('ErrorStatusField');
-  errorStatusField.setValue(this.field.errorStatus ? this.field.errorStatus.severity: null);
+  errorStatusField.setValue(this.field.errorStatus ? this.field.errorStatus.severity : null);
   errorStatusField.on('propertyChange', this._onPropertyChange.bind(this));
 
   var tooltipTextField = this.widget('TooltipTextField');
@@ -88,10 +88,21 @@ jswidgets.FormFieldPropertiesBox.prototype._setField = function(field) {
   var statusPositionField = this.widget('StatusPositionField');
   statusPositionField.setValue(this.field.statusPosition);
   statusPositionField.on('propertyChange', this._onPropertyChange.bind(this));
+
+  this.field.on('propertyChange', this._onError.bind(this));
+};
+
+jswidgets.FormFieldPropertiesBox.prototype._onError = function(event) {
+  if (event.propertyName === 'errorStatus'){
+    var errorStatusField = this.widget('ErrorStatusField');
+    var errorUIField = this.widget('ErrorUIField');
+
+    errorUIField.setValue(event.newValue ? JSON.stringify(event.newValue) : null);
+  }
 };
 
 jswidgets.FormFieldPropertiesBox.prototype._createErrorStatus = function(severity) {
-  if (!severity ) {
+  if (!severity) {
     return null;
   }
   return new scout.Status({
@@ -128,7 +139,8 @@ jswidgets.FormFieldPropertiesBox.prototype._onPropertyChange = function(event) {
       this.field.setLabelWidthInPixel(scout.numbers.ensure(event.newValue));
     }
   } else if (event.propertyName === 'value' && event.source.id === 'ErrorStatusField') {
-    this.field.setErrorStatus(this._createErrorStatus(event.newValue));
+    var newError = this._createErrorStatus(event.newValue);
+    this.field.setErrorStatus(newError);
   } else if (event.propertyName === 'value' && event.source.id === 'TooltipTextField') {
     this.field.setTooltipText(event.newValue);
   } else if (event.propertyName === 'value' && event.source.id === 'StatusPositionField') {

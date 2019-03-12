@@ -90,6 +90,27 @@
       "lookupCall": "jswidgets.StatusPositionLookupCall",
       "label": "Status Position",
       "displayStyle": "dropdown"
+    },
+    {
+      "id": "ErrorLog",
+      "objectType": "GroupBox",
+      "gridColumnCount": 2,
+      "label": "Error Status",
+      "expandable": true,
+      "expanded": false,
+      "fields": [
+        {
+          "id": "ErrorUIField",
+          "objectType": "StringField",
+          "label": "Error from UI",
+          "labelVisible": false,
+          "enabled": false,
+          "multilineText": true,
+          "gridDataHints": {
+            "h": 3
+          }
+        }
+      ]
     }
   ]
 }
